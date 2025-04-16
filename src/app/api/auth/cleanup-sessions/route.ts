@@ -6,10 +6,10 @@ export async function POST() {
         // Cập nhật các phiên không hoạt động quá 30 phút
         const result = await pool.query(
             `UPDATE sys_check_login 
-             SET scl_isactive = 'N',
-                 scl_logoutdate = scl_check_loginall
-             WHERE scl_isactive = 'I'
-             AND (EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - scl_check_loginall)) / 60) > 30
+             SET scl_trangthai = 'N',
+                 scl_logoutdate = scl_logtimeout
+             WHERE scl_trangthai = 'I'
+             AND (EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - scl_logtimeout)) / 60) > 30
              RETURNING scl_userid, scl_computername`
         );
 

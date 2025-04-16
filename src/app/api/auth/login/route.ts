@@ -60,16 +60,16 @@ export async function POST(req: Request) {
     // 3. Kiểm tra xem người dùng đã đăng nhập ở máy nào chưa
     const { computerName } = layIPTenMay();
     const checkActiveSession = await pool.query(
-      `SELECT scl_computername, scl_logindate, scl_check_loginall
+      `SELECT scl_computername, scl_logindate, scl_logtimeout
        FROM sys_check_login 
        WHERE scl_userid = $1 
-       AND scl_isactive = 'I'`,
+       AND scl_trangthai = 'I'`,
       [username]
     );
 
     if (checkActiveSession.rows.length > 0) {
       const activeSession = checkActiveSession.rows[0];
-      const lastActivity = new Date(activeSession.scl_check_loginall || activeSession.scl_logindate);
+      const lastActivity = new Date(activeSession.scl_logtimeout || activeSession.scl_logindate);
       const now = new Date();
       const inactiveMinutes = (now.getTime() - lastActivity.getTime()) / (1000 * 60);
 
@@ -77,10 +77,10 @@ export async function POST(req: Request) {
       if (inactiveMinutes > 30) {
         await pool.query(
           `UPDATE sys_check_login 
-           SET scl_isactive = 'N', 
+           SET scl_trangthai = 'N', 
                scl_logoutdate = $2
            WHERE scl_userid = $1 
-           AND scl_isactive = 'I'`,
+           AND scl_trangthai = 'I'`,
           [username, lastActivity]
         );
       } else if (activeSession.scl_computername !== computerName) {
@@ -137,10 +137,10 @@ export async function POST(req: Request) {
     // Đầu tiên set tất cả các phiên cũ thành không hoạt động
     await pool.query(
       `UPDATE sys_check_login 
-       SET scl_isactive = 'N', 
+       SET scl_trangthai = 'N', 
            scl_logoutdate = CURRENT_TIMESTAMP
        WHERE scl_userid = $1 
-       AND scl_isactive = 'I'`,
+       AND scl_trangthai = 'I'`,
       [username]
     );
 
@@ -152,8 +152,8 @@ export async function POST(req: Request) {
         scl_ipaddress,
         scl_computername,
         scl_logindate,
-        scl_isactive,
-        scl_check_loginall
+        scl_trangthai,
+        scl_logtimeout
       ) VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, 'I', CURRENT_TIMESTAMP)`,
       [user.ten_dang_nhap, department_id, clientIP, computerName]
     );

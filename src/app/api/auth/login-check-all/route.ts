@@ -13,13 +13,13 @@ export async function POST() {
 
         const user = JSON.parse(userCookie.value);
         
-        // Cập nhật scl_check_loginall cho phiên đăng nhập hiện tại
+        // Cập nhật scl_logtimeout cho phiên đăng nhập hiện tại
         await pool.query(
             `UPDATE sys_check_login 
-             SET scl_check_loginall = CURRENT_TIMESTAMP
+             SET scl_logtimeout = CURRENT_TIMESTAMP
              WHERE scl_userid = $1 
              AND scl_computername = $2
-             AND scl_isactive = 'I'`,
+             AND scl_trangthai = 'I'`,
             [user.username, user.computerName]
         );
 

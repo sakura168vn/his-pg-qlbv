@@ -17,16 +17,13 @@ import {
 export interface MenuItem {
     title: string;
     path: string;
+    pageTitle: string;
     icon: any;
     subItems?: {
         title: string;
         path: string;
+        pageTitle: string;
     }[];
-}
-
-export interface PageTitle {
-    path: string;
-    title: string;
 }
 
 export const menuItems: MenuItem[] = [
@@ -34,112 +31,168 @@ export const menuItems: MenuItem[] = [
     {
         title: "Trang Chủ",
         path: "/admin",
+        pageTitle: "TRANG CHỦ",
         icon: Grid,
     },
     {
         title: "Quản lý Tiếp Đón",
         path: "/tiedon",
+        pageTitle: "QUẢN LÝ TIẾP ĐÓN",
         icon: Stethoscope,
         subItems: [
-            { title: "Tiếp Đón Bệnh Nhân", path: "/tiepdon/benhnhan" },
-            { title: "Danh Sách Bệnh Nhân", path: "/tiepdon/danhsach" },            
+            { 
+                title: "Tiếp Đón Bệnh Nhân", 
+                path: "/tiepdon/benhnhan",
+                pageTitle: "QUẢN LÝ TIẾP ĐÓN"
+            },
+            { 
+                title: "Danh Sách Bệnh Nhân", 
+                path: "/tiepdon/danhsach",
+                pageTitle: "DANH SÁCH BỆNH NHÂN"
+            },
         ],
     },
     {
         title: "Quản lý Bác sĩ",
         path: "/bacsi",
+        pageTitle: "QUẢN LÝ BÁC SĨ",
         icon: Stethoscope,
         subItems: [
-            { title: "Danh sách bác sĩ", path: "/bacsi/danhsach" },
-            { title: "Thêm bác sĩ", path: "/bacsi/them" },
-            { title: "Chỉnh sửa bác sĩ", path: "/bacsi/chinhsua" },
+            { 
+                title: "Danh sách bác sĩ", 
+                path: "/bacsi/danhsach",
+                pageTitle: "DANH SÁCH BÁC SĨ"
+            },
+            { 
+                title: "Thêm bác sĩ", 
+                path: "/bacsi/them",
+                pageTitle: "THÊM BÁC SĨ"
+            },
+            { 
+                title: "Chỉnh sửa bác sĩ", 
+                path: "/bacsi/chinhsua",
+                pageTitle: "CHỈNH SỬA BÁC SĨ"
+            },
         ],
     },
     {
         title: "Quản lý Bệnh nhân",
         path: "/admin/patients",
+        pageTitle: "QUẢN LÝ BỆNH NHÂN",
         icon: Users,
         subItems: [
-            { title: "Danh sách bệnh nhân", path: "/benhnhan" },
-            { title: "Thêm bệnh nhân", path: "/admin/patients/add" },
-            { title: "Chỉnh sửa bệnh nhân", path: "/admin/patients/edit" },
+            { 
+                title: "Danh sách bệnh nhân", 
+                path: "/benhnhan",
+                pageTitle: "DANH SÁCH BỆNH NHÂN"
+            },
+            { 
+                title: "Thêm bệnh nhân", 
+                path: "/admin/patients/add",
+                pageTitle: "THÊM BỆNH NHÂN"
+            },
+            { 
+                title: "Chỉnh sửa bệnh nhân", 
+                path: "/admin/patients/edit",
+                pageTitle: "CHỈNH SỬA BỆNH NHÂN"
+            },
         ],
     },
     {
         title: "Quản lý Tài Trợ",
         path: "/qltaitro",
+        pageTitle: "CHƯƠNG TRÌNH QUẢN LÝ TÀI TRỢ",
         icon: FilePlus2,
         subItems: [
-            { title: "Danh sách bệnh nhân", path: "/qltaitro" },
+            { 
+                title: "Danh sách bệnh nhân", 
+                path: "/qltaitro",
+                pageTitle: "CHƯƠNG TRÌNH QUẢN LÝ TÀI TRỢ"
+            },
         ],
     },
     {
         title: "Khách Hàng",
         path: "/khachhang",
+        pageTitle: "THÔNG TIN KHÁCH HÀNG",
         icon: Calendar,
     },
     {
         title: "Quản Lý Dược",
         path: "/qlduoc",
+        pageTitle: "QUẢN LÝ DƯỢC",
         icon: LayoutGrid,
         subItems: [
-            { title: "Danh mục kho", path: "/qlduoc/dmkho" },
-            { title: "Danh mục nước sản xuất", path: "/qlduoc/dmnuocsanxuat" },
-            { title: "Danh mục hãng sản xuất", path: "/qlduoc/dmhangsanxuat" },
-            { title: "Danh mục loại hàng", path: "/qlduoc/dmloaihang" },
-            { title: "Danh mục tên hàng", path: "/qlduoc/dmtenhang" },
+            { 
+                title: "Danh mục kho", 
+                path: "/qlduoc/dmkho",
+                pageTitle: "DANH MỤC KHO"
+            },
+            { 
+                title: "Danh mục nước sản xuất", 
+                path: "/qlduoc/dmnuocsanxuat",
+                pageTitle: "DANH MỤC NƯỚC SẢN XUẤT"
+            },
+            { 
+                title: "Danh mục hãng sản xuất", 
+                path: "/qlduoc/dmhangsanxuat",
+                pageTitle: "DANH MỤC HÃNG SẢN XUẤT"
+            },
+            { 
+                title: "Danh mục loại hàng", 
+                path: "/qlduoc/dmloaihang",
+                pageTitle: "DANH MỤC LOẠI HÀNG"
+            },
+            { 
+                title: "Danh mục tên hàng", 
+                path: "/qlduoc/dmtenhang",
+                pageTitle: "DANH MỤC TÊN HÀNG"
+            },
         ],
     },
     {
         title: "Báo cáo",
         path: "/admin/reports",
+        pageTitle: "BÁO CÁO",
         icon: FileText,
     },
     {
         title: "Thông báo",
         path: "/admin/notifications",
+        pageTitle: "THÔNG BÁO",
         icon: AlertCircle,
     },
     {
         title: "Tin nhắn",
         path: "/admin/messages",
+        pageTitle: "TIN NHẮN",
         icon: MessageSquare,
     },
     {
         title: "Cài đặt",
         path: "/caidat",
+        pageTitle: "CÀI ĐẶT",
         icon: Settings,
         subItems: [
-            { title: "Thiết lập khoa", path: "/caidat/thietlapkhoa" },
+            { 
+                title: "Thiết lập khoa", 
+                path: "/caidat/dmkhoa",
+                pageTitle: "THIẾT LẬP KHOA"
+            },
         ],
     },
 ];
 
-export const pageTitles: PageTitle[] = [
-    { path: "/admin", title: "TRANG CHỦ" },
-    { path: "/tiepdon", title: "QUẢN LÝ TIẾP ĐÓN" },
-    { path: "/tiepdon/benhnhan", title: "QUẢN LÝ TIẾP ĐÓN" },
-    { path: "/bacsi", title: "QUẢN LÝ BÁC SĨ" },
-    { path: "/bacsi/danhsach", title: "DANH SÁCH BÁC SĨ" },
-    { path: "/bacsi/them", title: "THÊM BÁC SĨ" },
-    { path: "/bacsi/chinhsua", title: "CHỈNH SỬA BÁC SĨ" },
-    { path: "benhnhan", title: "DANH SÁCH BỆNH NHÂN" },
-    { path: "/admin", title: "LỊCH HẸN" },
-    { path: "/khoaphong", title: "KHOA/PHÒNG BAN" },
-    { path: "/admin/reports", title: "BÁO CÁO" },
-    { path: "/admin/notifications", title: "THÔNG BÁO" },
-    { path: "/admin/messages", title: "TIN NHẮN" },
-    { path: "/admin/settings", title: "CÀI ĐẶT" },
-    { path: "/khachhang", title: "THÔNG TIN KHÁCH HÀNG" },
-    { path: "/lichbacsi", title: "LỊCH BÁC SĨ" },
-    { path: "/dongmokho", title: "ĐÓNG - MỞ KHO XUẤT VTTH" },
-    { path: "/nguoidung", title: "THÔNG TIN CÁ NHÂN" },
-    { path: "/qltaitro", title: "CHƯƠNG TRÌNH QUẢN LÝ TÀI TRỢ" },
-    { path: "/caidat/thietlapkhoa", title: "THIẾT LẬP KHOA" },
+export const getPageTitle = (path: string): string => {
+    const mainItem = menuItems.find(item => item.path === path);
+    if (mainItem) return mainItem.pageTitle;
 
-    { path: "/qlduoc/dmkho", title: "DANH MỤC KHO" },
-    { path: "/qlduoc/dmnuocsanxuat", title: "DANH MỤC NƯỚC SẢN XUẤT" },
-    { path: "/qlduoc/dmhangsanxuat", title: "DANH MỤC HÃNG SẢN XUẤT" },
-    { path: "/qlduoc/dmloaihang", title: "DANH MỤC LOẠI HÀNG" },
-    { path: "/qlduoc/dmtenhang", title: "DANH MỤC TÊN HÀNG" },
-]; 
+    for (const item of menuItems) {
+        if (item.subItems) {
+            const subItem = item.subItems.find(sub => sub.path === path);
+            if (subItem) return subItem.pageTitle;
+        }
+    }
+
+    return "";
+}; 

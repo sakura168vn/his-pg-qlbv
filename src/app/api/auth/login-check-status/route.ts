@@ -40,7 +40,7 @@ export async function POST(req: Request) {
             `SELECT * FROM sys_check_login 
              WHERE scl_userid = $1 
              AND scl_computername = $2 
-             AND scl_isactive = 'I'`,
+             AND scl_trangthai = 'I'`,
             [username, computerName]
         );
 

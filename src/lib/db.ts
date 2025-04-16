@@ -18,8 +18,8 @@ async function cleanupInactiveSessions() {
     const inactiveSessions = await pool.query(
       `SELECT scl_userid, scl_computername, scl_ipaddress
        FROM sys_check_login 
-       WHERE scl_isactive = 'I'
-       AND (EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - scl_check_loginall)) / 60) > 30`
+       WHERE scl_trangthai = 'I'
+       AND (EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - scl_logtimeout)) / 60) > 30`
     );
 
     if (inactiveSessions?.rows.length > 0) {
@@ -32,11 +32,11 @@ async function cleanupInactiveSessions() {
             // Nếu máy offline thì mới update trạng thái
             const result = await pool.query(
               `UPDATE sys_check_login 
-               SET scl_isactive = 'N',
-                   scl_logoutdate = scl_check_loginall
+               SET scl_trangthai = 'N',
+                   scl_logoutdate = scl_logtimeout
                WHERE scl_userid = $1 
                AND scl_computername = $2
-               AND scl_isactive = 'I'
+               AND scl_trangthai = 'I'
                RETURNING scl_userid, scl_computername`,
               [session.scl_userid, session.scl_computername]
             );
@@ -49,10 +49,10 @@ async function cleanupInactiveSessions() {
             // Cập nhật lại thời gian check để tránh check lại trong thời gian ngắn
             await pool.query(
               `UPDATE sys_check_login 
-               SET scl_check_loginall = CURRENT_TIMESTAMP
+               SET scl_logtimeout = CURRENT_TIMESTAMP
                WHERE scl_userid = $1 
                AND scl_computername = $2
-               AND scl_isactive = 'I'`,
+               AND scl_trangthai = 'I'`,
               [session.scl_userid, session.scl_computername]
             );
           }
@@ -94,7 +94,7 @@ pool.query('SELECT NOW()', (err, res) => {
   if (err) {
     console.error('Lỗi kết nối database:', err);
   } else {
-    console.log('Đã kết nối thành công đến database');
+    //console.log('Đã kết nối thành công đến database');
   }
 });
 

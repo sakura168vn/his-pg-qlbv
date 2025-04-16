@@ -13,10 +13,10 @@ export async function POST(req: Request) {
         const logoutResult = await pool.query(
             `UPDATE sys_check_login 
              SET scl_logoutdate = CURRENT_TIMESTAMP,
-                 scl_isactive = 'N'
+                 scl_trangthai = 'N'
              WHERE scl_userid = $1 
              AND scl_computername = $2 
-             AND scl_isactive = 'I'
+             AND scl_trangthai = 'I'
              RETURNING *`,
             [username, computerName]
         );

@@ -9,7 +9,7 @@ import { Logout } from "@mui/icons-material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { motion, AnimatePresence } from "framer-motion";
-import { pageTitles } from "@/config/menu";
+import { getPageTitle } from "@/config/menu";
 import { CustomSnackbar } from "@/components/ui/CustomSnackbar";
 
 /**
@@ -196,7 +196,7 @@ const Topbar: React.FC<TopbarProps> = ({ isSidebarOpen, toggleSidebar, isCollaps
     };
 
     const pathname = usePathname();
-    const currentTitle = pageTitles.find(title => pathname === title.path)?.title || "";
+    const currentTitle = getPageTitle(pathname) || "";
 
     const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
         setAnchorEl(event.currentTarget);
