@@ -27,6 +27,7 @@ export default function ButtonCRUD({ type, onClick, disabled = false }: ButtonCR
 
   return (
     <button
+      type="button"
       onClick={onClick}
       disabled={disabled}
       className="flex items-center justify-center h-[36px] min-w-[100px] px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-[#FF3333] 

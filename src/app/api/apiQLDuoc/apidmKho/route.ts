@@ -6,6 +6,7 @@ export async function GET(request: Request) {
         const { searchParams } = new URL(request.url);
         const trangThai = searchParams.get('trangThai') || 'Y';
         const tenKho = searchParams.get('tenKho');
+        const loaiKho = searchParams.get('loaiKho');
 
         let queryParams = [trangThai];
         let query = `
@@ -24,6 +25,11 @@ export async function GET(request: Request) {
         if (tenKho) {
             queryParams.push(`%${tenKho}%`);
             query += ` AND LOWER(dmkho_ten) LIKE LOWER($${queryParams.length})`;
+        }
+
+        if (loaiKho) {
+            queryParams.push(loaiKho);
+            query += ` AND dmkho_loai = $${queryParams.length}`;
         }
 
         query += ` ORDER BY dmkho_ma`;
@@ -45,37 +51,42 @@ export async function POST(request: Request) {
         const body = await request.json();
         const { dmkho_ma, dmkho_ten, dmkho_loai, dmkho_khoa, dmkho_trangthai } = body;
 
-        // Kiểm tra các trường bắt buộc
-        if (!dmkho_ma || !dmkho_ten || !dmkho_loai || !dmkho_khoa) {
+        // Kiểm tra và xử lý dữ liệu đầu vào
+        const trimmedMa = dmkho_ma?.trim() || '';
+        const trimmedTen = dmkho_ten?.trim() || '';
+        const trimmedLoai = dmkho_loai?.trim() || '';
+        const trimmedKhoa = dmkho_khoa?.trim() || '';
+
+        // Kiểm tra dữ liệu trống
+        if (!trimmedMa) {
             return NextResponse.json(
-                { message: 'Vui lòng điền đầy đủ thông tin bắt buộc' },
+                { message: 'Vui lòng nhập mã kho', field: 'ma_kho' },
                 { status: 400 }
             );
         }
 
-        // Kiểm tra định dạng dữ liệu
-        if (typeof dmkho_ma !== 'string' || typeof dmkho_ten !== 'string' || 
-            typeof dmkho_loai !== 'string' || typeof dmkho_khoa !== 'string') {
+        if (!trimmedTen) {
             return NextResponse.json(
-                { message: 'Định dạng dữ liệu không hợp lệ' },
+                { message: 'Vui lòng nhập tên kho', field: 'ten_kho' },
                 { status: 400 }
             );
         }
 
-        // Kiểm tra độ dài và loại bỏ khoảng trắng thừa
-        const trimmedMa = dmkho_ma.trim();
-        const trimmedTen = dmkho_ten.trim();
-        const trimmedLoai = dmkho_loai.trim();
-        const trimmedKhoa = dmkho_khoa.trim();
-
-        if (!trimmedMa || !trimmedTen || !trimmedLoai || !trimmedKhoa) {
+        if (!trimmedLoai) {
             return NextResponse.json(
-                { message: 'Các trường không được chỉ chứa khoảng trắng' },
+                { message: 'Vui lòng chọn loại kho', field: 'loai_kho' },
                 { status: 400 }
             );
         }
 
-        // Kiểm tra mã kho đã tồn tại chưa
+        if (!trimmedKhoa) {
+            return NextResponse.json(
+                { message: 'Vui lòng chọn khoa', field: 'khoa' },
+                { status: 400 }
+            );
+        }
+
+        // Kiểm tra mã kho đã tồn tại
         const checkQuery = `
             SELECT dmkho_ma FROM qlduoc_dmkho WHERE dmkho_ma = $1
         `;
@@ -83,12 +94,12 @@ export async function POST(request: Request) {
         
         if (checkResult.rows.length > 0) {
             return NextResponse.json(
-                { message: 'Mã kho đã tồn tại' },
+                { message: 'Mã kho đã tồn tại', field: 'ma_kho' },
                 { status: 400 }
             );
         }
 
-        // Thêm kho mới với dữ liệu đã được validate
+        // Thêm kho mới
         const insertQuery = `
             INSERT INTO qlduoc_dmkho (
                 dmkho_ma,
@@ -105,14 +116,14 @@ export async function POST(request: Request) {
             trimmedTen,
             trimmedLoai,
             trimmedKhoa,
-            dmkho_trangthai || 'Y' // Mặc định là 'Y' nếu không được cung cấp
+            dmkho_trangthai || 'Y'
         ]);
 
         return NextResponse.json(result.rows[0]);
     } catch (error) {
         console.error('Error creating kho:', error);
         return NextResponse.json(
-            { message: 'Lỗi khi thêm kho mới' },
+            { message: 'Có lỗi xảy ra khi thêm kho mới', field: 'system' },
             { status: 500 }
         );
     }

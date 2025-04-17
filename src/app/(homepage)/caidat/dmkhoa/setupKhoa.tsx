@@ -107,7 +107,7 @@ export default function FromSetupKhoaPage() {
                                         <td colSpan={4} className="text-center py-4">
                                             <div className="flex justify-center items-center">
                                                 <FaSync className="animate-spin text-blue-600 mr-2" />
-                                                <span>Đang tải dữ liệu...</span>
+                                                <span>Loading...</span>
                                             </div>
                                         </td>
                                     </tr>

@@ -89,7 +89,7 @@ const DSHoSoChiTiet: React.FC<DSHoSoChiTietProps> = ({ searchParams, data, loadi
                                         <td colSpan={18} className="text-center py-8">
                                             <div className="flex items-center justify-center space-x-2">
                                                 <FaSync className="animate-spin text-blue-600" />
-                                                <span className="text-gray-600">Đang tải dữ liệu...</span>
+                                                <span className="text-gray-600">Loading...</span>
                                             </div>
                                         </td>
                                     </tr>

@@ -35,23 +35,10 @@ export default function DanhMucKhoPage() {
 
     const handleAddSubmit = async (data: any) => {
         try {
-            const response = await fetch('/api/apiQLDuoc/apiAddKho', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Có lỗi xảy ra');
-            }
-
-            setIsAddPopupOpen(false);
+            // Refresh data ngay lập tức
             handleRefresh();
         } catch (error: any) {
-            alert(error.message);
+            console.error('Lỗi khi cập nhật dữ liệu:', error);
         }
     };
 

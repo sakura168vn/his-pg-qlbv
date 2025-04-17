@@ -22,12 +22,36 @@ export default function DanhMucKhoPage({ trangThai, searchParams }: DanhMucKhoPa
     const [danhSachKho, setDanhSachKho] = useState<DanhMucKho[]>([]);
     const [filteredDanhSachKho, setFilteredDanhSachKho] = useState<DanhMucKho[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [loaiKhoMapping, setLoaiKhoMapping] = useState<{ [key: string]: string }>({});
+
+    useEffect(() => {
+        const fetchLoaiKho = async () => {
+            try {
+                const response = await fetch('/api/apiQLDuoc/apidmLoai');
+                if (!response.ok) {
+                    throw new Error('Không thể tải dữ liệu loại kho');
+                }
+                const data = await response.json();
+                const mapping: { [key: string]: string } = {};
+                data.forEach((item: any) => {
+                    mapping[item.dmloai_ma] = item.dmloai_ten;
+                });
+                setLoaiKhoMapping(mapping);
+            } catch (error) {
+                console.error('Lỗi khi tải dữ liệu loại kho:', error);
+            }
+        };
+        fetchLoaiKho();
+    }, []);
 
     const fetchData = async () => {
         try {
             let url = `/api/apiQLDuoc/apidmKho?trangThai=${trangThai}`;
             if (searchParams?.tenKho) {
                 url += `&tenKho=${encodeURIComponent(searchParams.tenKho)}`;
+            }
+            if (searchParams?.loaiKho) {
+                url += `&loaiKho=${encodeURIComponent(searchParams.loaiKho)}`;
             }
             
             const response = await fetch(url);
@@ -36,7 +60,7 @@ export default function DanhMucKhoPage({ trangThai, searchParams }: DanhMucKhoPa
             }
             const data = await response.json();
             setDanhSachKho(data);
-            filterData(data);
+            setFilteredDanhSachKho(data);
         } catch (error) {
             console.error('Lỗi khi tải dữ liệu:', error);
         } finally {
@@ -44,30 +68,9 @@ export default function DanhMucKhoPage({ trangThai, searchParams }: DanhMucKhoPa
         }
     };
 
-    const filterData = (data: DanhMucKho[]) => {
-        let filtered = [...data];
-
-        if (searchParams?.loaiKho) {
-            const loaiKhoMapping: { [key: string]: string } = {
-                'A': 'Kho Chính',
-                'B': 'Kho Điều Trị',
-                'C': 'Tủ Trực',
-                'D': 'Quầy Thuốc'
-            };
-            const tenLoaiKho = loaiKhoMapping[searchParams.loaiKho];
-            filtered = filtered.filter(kho => kho.loai_kho === tenLoaiKho);
-        }
-
-        setFilteredDanhSachKho(filtered);
-    };
-
     useEffect(() => {
         fetchData();
-    }, [trangThai, searchParams?.tenKho]);
-
-    useEffect(() => {
-        filterData(danhSachKho);
-    }, [searchParams?.loaiKho, danhSachKho]);
+    }, [trangThai, searchParams?.tenKho, searchParams?.loaiKho]);
 
     const getTrangThaiText = (trangThai: string) => {
         return trangThai === 'Y' ? 'Hoạt động' : trangThai === 'N' ? 'Ngừng hoạt động' : '';
@@ -102,7 +105,7 @@ export default function DanhMucKhoPage({ trangThai, searchParams }: DanhMucKhoPa
                     <tbody className={`divide-y divide-gray-200`}>
                         {isLoading ? (
                             <tr>
-                                <td colSpan={5} className="px-2 py-2 text-center">Đang tải dữ liệu...</td>
+                                <td colSpan={5} className="px-2 py-2 text-center">Loading...</td>
                             </tr>
                         ) : filteredDanhSachKho.length === 0 ? (
                             <tr>
@@ -123,7 +126,7 @@ export default function DanhMucKhoPage({ trangThai, searchParams }: DanhMucKhoPa
                         )}
                     </tbody>
                 </table>
-            </div>
+            </div>  
         </div>
     );
 };

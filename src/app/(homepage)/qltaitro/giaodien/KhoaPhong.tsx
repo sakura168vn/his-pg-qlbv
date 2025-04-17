@@ -98,7 +98,7 @@ const DSKhoaPhongTaiTro: React.FC<DSKhoaPhongTaiTroProps> = ({ onKhoaClick, sele
                                 <td colSpan={2} className="text-center py-8">
                                     <div className="flex items-center justify-center space-x-2">
                                         <FaSync className="animate-spin text-blue-600" />
-                                        <span className="text-gray-600">Đang tải dữ liệu...</span>
+                                        <span className="text-gray-600">Loading...</span>
                                     </div>
                                 </td>
                             </tr>
